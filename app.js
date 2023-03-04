@@ -19,6 +19,17 @@ app.get('/', function (req, res) {
 app.get('/addjob', function (req, res) {
   res.render('addjob')
 })
+app.post('/addjob', function (req, res) {
+  console.log(req.body.postTitle)
+})
+app.get('/static', function (req, res) {
+  res.render('static')
+})
+app.get('/profile', function (req, res) {
+  res.render('profile')
+})
+
+//
 app.listen(3000, function () {
   console.log('Server started on port 3000')
 })
