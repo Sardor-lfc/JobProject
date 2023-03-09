@@ -1,11 +1,86 @@
 <%- include("partials/header") -%>
-<h2>Hello Home Page</h2>
-<%console.log(posts)%>
-<!--  -->
-<!--for (var i=0; i<posts.length; i++){console.log(posts[i].title)} -->
-	<%posts.forEach(function(post){%>
-    <h1><%=post.title%></h1>
-	<p><%=post.content%></p>
-	<%})%>
-  <%- include("partials/footer")-%>
-</posts.length;>
+
+<!--<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <h2 class="text-center mb-4">Hello Home Page</h2>
+
+      <%posts.forEach(function(post){%>
+      <div class="card mb-2">
+        <div class="card-body">
+          <h5 class="card-title"><%=post.title%></h5>
+          <div class="container text-center">
+            <div class="row row-cols-2">
+              <div class="col"><p class="card-text">Location</p></div>
+              <div class="col">
+                <p class="card-text">Type:</p>
+              </div>
+
+              <div class="col"><p class="card-text">Status:</p></div>
+              <div class="col"><p class="card-text">Date:</p></div>
+            </div>
+            <div class="col">
+              <p class="card-text">
+                <%=post.content.substring(0, 200)+"...."%>
+              </p>
+            </div>
+          </div>
+          <a href="/posts/<%=post.title%>" class="btn btn-primary">View More</a>
+        </div>
+      </div>
+      <%})%>
+    </div>
+  </div>
+</div>-->
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <h2 class="text-center mb-4">Hello Home Page</h2>
+
+      <%posts.forEach(function(post){%>
+      <div class="card mb-2">
+        <div class="card-body">
+          <div class="container">
+            <h3 class="card-title"><%=post.title%></h3>
+            <h6 class="fw-normal"><%=post.company%></h6>
+          </div>
+
+          <div class="container">
+            <div class="row">
+              <div class="col-6">
+                <p class="card-text">
+                  <strong>Location:</strong>
+                  <%=post.location%>
+                </p>
+                <p class="card-text">
+                  <strong>Status:</strong>
+                  <%=post.status%>
+                </p>
+              </div>
+              <div class="col-6">
+                <p class="card-text"><strong>Type: </strong> <%=post.type%></p>
+                <p class="card-text"><strong>Date:</strong></p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <p class="card-text">
+                  <strong>Description: </strong>
+                  <%=post.content.substring(0, 200)+"...."%>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="mt-10">
+            <a href="/posts/<%=post.title%>" class="btn btn-primary"
+              >View More</a
+            >
+          </div>
+        </div>
+      </div>
+      <%})%>
+    </div>
+  </div>
+</div>
+
+<%- include("partials/footer")-%>
