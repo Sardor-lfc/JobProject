@@ -63,6 +63,27 @@ app.get('/profile', function (req, res) {
   res.render('profile')
 })
 //
+app.post('/delete/:_id', async (req, res) => {
+  try {
+    await Post.deleteOne({ _id: req.params._id })
+    return res.redirect('/')
+  } catch (error) {
+    console.error(error)
+    return res.status(500).send('Server error')
+  }
+})
+//Update function
+app.post('/update/:_id', async (req, res) => {
+  try {
+    await Post.findOneAndUpdate({ _id: req.params._id })
+    return res.redirect('addjob')
+  } catch (error) {
+    console.error(error)
+    return res.status(500).send('Server error')
+  }
+})
+
+//
 app.get('/posts/:postId', function (req, res) {
   const requestedPostId = req.params.postId
   Post.findOne({ _id: requestedPostId }, function (err, post) {
