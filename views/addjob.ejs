@@ -1,25 +1,13 @@
 <%- include("partials/header")-%>
 
-  <!--<form class="container" action="/addjob" method="post">
-  <div class="form-group">
-    <label>Title</label>
-    <h2>Create your job posting</h2>
-    <input class="form-control" type="text" name="postTitle" />
-    <label>Post</label>
-    <textarea
-      class="form-control"
-      name="postBody"
-      rows="5"
-      cols="30"
-    ></textarea>
-  </div>
-  <button class="btn btn-primary" type="submit" name="button">Publish</button>
-</form>-->
+
+
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-md-6">
         <div class="card border-0 shadow-sm">
           <div class="card-body">
+
             <h2 class="card-title text-center mb-5">Create Your Job Posting</h2>
             <form action="/addjob" method="post">
               <div class="form-group">
@@ -33,6 +21,7 @@
               <div class="form-group">
                 <label for="postLocation">Location</label>
                 <input class="form-control border-0 bg-light" type="text" name="postLocation" id="postTitle" />
+
               </div>
               <div class="input-group mb-3 mt-3">
                 <select class="form-select" id="inputGroupSelect01" name="postStatus">
@@ -52,7 +41,7 @@
               <div class="form-group">
                 <label for="postBody">Description</label>
                 <textarea class="form-control border-0 bg-light" name="postBody" id="postBody" rows="5"
-                  placeholder="Write your job posting here"></textarea>
+                  placeholder="Write your Description here"></textarea>
               </div>
               <button class="btn btn-primary btn-block mt-3" type="submit" name="button">
                 Publish
@@ -60,6 +49,7 @@
             </form>
           </div>
         </div>
+
       </div>
     </div>
   </div>

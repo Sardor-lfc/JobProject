@@ -74,12 +74,8 @@
                   <input type="hidden" name="_method" value="DELETE" />
                   <button type="submit" class="btn btn-outline-danger">Delete</button>
                 </form>
-                <form action="/update/:_id" method="post">
-
-
-                  <!-- add more fields as needed -->
-
-                  <button type="submit">Update</button>
+                <form method="POST" action="/update/<%= post._id %>">
+                  <button type="submit" class="btn btn-success">Update Post</button>
                 </form>
 
               </div>
