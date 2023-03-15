@@ -8,7 +8,10 @@ const contactStartingContent = 'Hello Contact'
 const _ = require('lodash')
 const app = express()
 app.set('view engine', 'ejs')
-mongoose.connect('mongodb://localhost:27017/jobDB', { useNewUrlParser: true })
+mongoose.connect(
+  'mongodb+srv://sardor:7Unk4pjcfQfnACAF@cluster0.zkcl7ij.mongodb.net/jobDB',
+  { useNewUrlParser: true },
+)
 const postSchema = {
   title: String,
   company: String,
