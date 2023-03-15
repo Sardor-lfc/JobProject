@@ -21,6 +21,7 @@ const Post = mongoose.model('Post', postSchema)
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static('public'))
 app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'))
+
 //
 
 app.get('/', function (req, res) {
@@ -73,10 +74,14 @@ app.post('/delete/:_id', async (req, res) => {
   }
 })
 //Update function
-app.post('/update/:_id', async (req, res) => {
+
+app.get('/edit/:_id', async (req, res) => {
   try {
-    await Post.updateMany({ _id: req.params._id })
-    return res.redirect('/addjob')
+    const post = await Post.findById(req.params._id)
+    if (!post) {
+      return res.status(404).send('Post not found')
+    }
+    res.render('edits/edit', { post })
   } catch (error) {
     console.error(error)
     return res.status(500).send('Server error')
@@ -84,22 +89,22 @@ app.post('/update/:_id', async (req, res) => {
 })
 
 //
-app.get('/posts/:postId', function (req, res) {
+app.get('/posts/:postId', async (req, res) => {
   const requestedPostId = req.params.postId
-  Post.findOne({ _id: requestedPostId }, function (err, post) {
-    if (err) {
-      console.log(err)
-    } else {
-      res.render('post', {
-        title: post.title,
-        company: post.comapany,
-        content: post.content,
-        location: post.location,
-        status: post.status,
-        type: post.type,
-      })
-    }
-  })
+  try {
+    const post = await Post.findOne({ _id: requestedPostId }).exec()
+    res.render('post', {
+      title: post.title,
+      company: post.company,
+      content: post.content,
+      location: post.location,
+      status: post.status,
+      type: post.type,
+    })
+  } catch (err) {
+    console.error(err)
+    res.status(500).send('Server error')
+  }
 })
 
 app.listen(3000, function () {
