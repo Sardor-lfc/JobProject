@@ -2,9 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const ejs = require('ejs')
 const mongoose = require('mongoose')
-const homeStartingContent = 'Hello About'
-const aboutStartingContent = 'Hello About'
-const contactStartingContent = 'Hello Contact'
+
 const _ = require('lodash')
 const app = express()
 app.set('view engine', 'ejs')
@@ -41,6 +39,12 @@ app.get('/', function (req, res) {
 
 app.get('/addjob', function (req, res) {
   res.render('addjob')
+})
+app.get('/login', function (res, res) {
+  res.render('login')
+})
+app.get('/register', function (res, res) {
+  res.render('register')
 })
 app.post('/addjob', function (req, res) {
   const post = Post({
