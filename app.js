@@ -1,15 +1,17 @@
+require('dotenv').config()
 const express = require('express')
 const bodyParser = require('body-parser')
 const ejs = require('ejs')
 const mongoose = require('mongoose')
-
+const bcrypt = require('bcrypt')
+const saltRounds = 10
 const _ = require('lodash')
 const app = express()
+
 app.set('view engine', 'ejs')
-mongoose.connect(
-  'mongodb+srv://sardor:7Unk4pjcfQfnACAF@cluster0.zkcl7ij.mongodb.net/jobDB',
-  { useNewUrlParser: true },
-)
+
+mongoose.connect('mongodb://localhost:27017/jobDB', { useNewUrlParser: true })
+
 const postSchema = {
   title: String,
   company: String,
@@ -19,6 +21,12 @@ const postSchema = {
   type: String,
 }
 const Post = mongoose.model('Post', postSchema)
+//
+
+const userSchema = new mongoose.Schema({ email: String, password: String })
+
+const User = new mongoose.model('User', userSchema)
+
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static('public'))
 app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'))
@@ -40,11 +48,62 @@ app.get('/', function (req, res) {
 app.get('/addjob', function (req, res) {
   res.render('addjob')
 })
-app.get('/login', function (res, res) {
+app.get('/login', function (req, res) {
   res.render('login')
 })
-app.get('/register', function (res, res) {
+app.get('/register', function (req, res) {
   res.render('register')
+})
+
+app.get('/error', function (req, res) {
+  res.render('error')
+})
+app.post('/login', async function (req, res) {
+  const { username, password } = req.body
+
+  try {
+    const foundUser = await User.findOne({ email: username })
+
+    if (foundUser) {
+      const result = await bcrypt.compare(password, foundUser.password)
+      if (result === true) {
+        res.redirect('/')
+      } else {
+        res.redirect('error')
+      }
+    } else {
+      res.redirect('error')
+    }
+  } catch (err) {
+    console.log(err)
+    res.send('Something went wrong')
+  }
+})
+
+app.post('/register', function (req, res) {
+  bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
+    const newUser = new User({
+      email: req.body.username,
+      password: hash,
+    })
+    newUser
+      .save()
+      .then(() => {
+        res.redirect('/')
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  })
+})
+app.get('/logout', function (req, res) {
+  req.logout(function (err) {
+    if (err) {
+      return next(err)
+    }
+    // perform additional actions after logout
+    res.redirect('/')
+  })
 })
 app.post('/addjob', function (req, res) {
   const post = Post({
