@@ -4,8 +4,37 @@
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-md-8">
-        <h2 class="text-center mb-4">Hello Home Page</h2>
+        <!--  -->
+        <form action="/search" method="GET">
+          <div class="mb-2 mt-4">
+            <div class="row">
+              <div class="col">
+                <label for="" class="form-label">Roles</label>
+                <input type="text" class="form-control" placeholder="Just Search.....">
+              </div>
+              <div class="col">
+                <label for="exampleTpe" class="form-label">Type</label>
+                <input class="form-control" list="typeOptions" id="exampleTpe" placeholder="Type to search...">
+                <datalist id="typeOptions">
+                  <option value="Full-Time">
+                  <option value="Part-Time">
+                  <option value="Internship">
+                  <option value="Placement">
 
+                </datalist>
+              </div>
+            </div>
+            <label for="locationDataList" class="form-label">Location</label>
+            <input class="form-control" list="locationOptions" id="locationDataList" placeholder="Type to search...">
+            <datalist id="locationOptions">
+              <option value="London">
+              <option value="Manchester">
+              <option value="Liverpool">
+              <option value="Leicester">
+            </datalist>
+          </div>
+        </form>
+        <!--  -->
         <%posts.forEach(function(post){%>
           <div class="card mb-2  ">
             <div class="card-body">

@@ -1,9 +1,9 @@
-require('dotenv').config()
+//require('dotenv').config()
 const express = require('express')
 const bodyParser = require('body-parser')
 const ejs = require('ejs')
 const mongoose = require('mongoose')
-const bcrypt = require('bcrypt')
+//const bcrypt = require('bcrypt')
 const saltRounds = 10
 const _ = require('lodash')
 const app = express()
@@ -58,6 +58,24 @@ app.get('/register', function (req, res) {
 app.get('/error', function (req, res) {
   res.render('error')
 })
+//
+//app.get('/search', async (req, res) => {
+//  const { id, type, location } = req.query
+//  const query = {}
+//
+//  if (location) {
+//    query.location = location
+//  }
+//  try {
+//    const results = await db.collection('posts').find(query).toArray()
+//    res.render('home', { results })
+//  } catch (err) {
+//    console.error(err)
+//    res.status(500).send('Error searching for jobs')
+//  }
+//})
+
+//
 app.post('/login', async function (req, res) {
   const { username, password } = req.body
 
