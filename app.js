@@ -7,7 +7,6 @@ const mongoose = require('mongoose')
 const saltRounds = 10
 const _ = require('lodash')
 const app = express()
-
 app.set('view engine', 'ejs')
 
 mongoose.connect('mongodb://localhost:27017/jobDB', { useNewUrlParser: true })
@@ -20,6 +19,13 @@ const postSchema = {
   status: String,
   type: String,
 }
+const dateSchema = new mongoose.Schema({
+  dateString: {
+    type: Date,
+    default: Date.now,
+  },
+})
+const DateModel = mongoose.model('Date', dateSchema)
 const Post = mongoose.model('Post', postSchema)
 //
 
@@ -33,11 +39,20 @@ app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'))
 
 //
 
+const currentDate = new Date()
+currentDate.setHours(0, 0, 0, 0)
+const dateString = currentDate.toLocaleString('en-GB')
+
+const dateObject = new DateModel({ dateString })
+dateObject.save()
+
+//
 app.get('/', function (req, res) {
   Post.find({})
     .then((posts) => {
       res.render('home', {
         posts: posts,
+        dateAndTime: dateString,
       })
     })
     .catch((err) => {
