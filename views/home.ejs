@@ -33,7 +33,12 @@
               <option value="Liverpool">
               <option value="Leicester">
             </datalist>
+            <div>
+              <button type="button" class="btn btn-success mt-2">Submit</button>
+            </div>
           </div>
+
+
         </form>
         <!--  -->
         <%posts.forEach(function(post){%>
@@ -113,10 +118,9 @@
                 <a href="/posts/<%=post._id%>" class="btn btn-primary">View More</a>
                 posted on <%=dateAndTime%>
               </div>
-              <button type="button" class="btn btn-outline-primary">
-                <i class="bi bi-heart"></i> Like
-              </button>
 
+              <button type="button" class="btn btn-outline-danger mt-3" style="border-radius: 100px;">
+                <span class="">❤️</span></button>
             </div>
           </div>
           <%})%>
