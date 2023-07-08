@@ -3,8 +3,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const ejs = require('ejs')
 const mongoose = require('mongoose')
-//const bcrypt = require('bcrypt')
-const saltRounds = 10
+
 const _ = require('lodash')
 const app = express()
 app.set('view engine', 'ejs')
@@ -63,81 +62,11 @@ app.get('/', function (req, res) {
 app.get('/addjob', function (req, res) {
   res.render('addjob')
 })
-app.get('/login', function (req, res) {
-  res.render('login')
-})
-app.get('/register', function (req, res) {
-  res.render('register')
-})
 
 app.get('/error', function (req, res) {
   res.render('error')
 })
-//
-//app.get('/search', async (req, res) => {
-//  const { id, type, location } = req.query
-//  const query = {}
-//
-//  if (location) {
-//    query.location = location
-//  }
-//  try {
-//    const results = await db.collection('posts').find(query).toArray()
-//    res.render('home', { results })
-//  } catch (err) {
-//    console.error(err)
-//    res.status(500).send('Error searching for jobs')
-//  }
-//})
 
-//
-app.post('/login', async function (req, res) {
-  const { username, password } = req.body
-
-  try {
-    const foundUser = await User.findOne({ email: username })
-
-    if (foundUser) {
-      const result = await bcrypt.compare(password, foundUser.password)
-      if (result === true) {
-        res.redirect('/')
-      } else {
-        res.redirect('error')
-      }
-    } else {
-      res.redirect('error')
-    }
-  } catch (err) {
-    console.log(err)
-    res.send('Something went wrong')
-  }
-})
-
-app.post('/register', function (req, res) {
-  bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
-    const newUser = new User({
-      email: req.body.username,
-      password: hash,
-    })
-    newUser
-      .save()
-      .then(() => {
-        res.redirect('/')
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  })
-})
-app.get('/logout', function (req, res) {
-  req.logout(function (err) {
-    if (err) {
-      return next(err)
-    }
-    // perform additional actions after logout
-    res.redirect('/')
-  })
-})
 app.post('/addjob', function (req, res) {
   const post = Post({
     title: req.body.postTitle,
@@ -212,5 +141,5 @@ if (port == null || port == '') {
 }
 
 app.listen(port, function () {
-  console.log('Server started successfully')
+  console.log('Server started successfully at 3000')
 })
