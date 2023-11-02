@@ -3,7 +3,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const ejs = require('ejs')
 const mongoose = require('mongoose')
-
+const port = 4000
 const _ = require('lodash')
 const app = express()
 app.set('view engine', 'ejs')
@@ -62,7 +62,16 @@ app.get('/', function (req, res) {
 app.get('/addjob', function (req, res) {
   res.render('addjob')
 })
-
+//
+//
+app.get('/login', function (req, res) {
+  res.render('login')
+})
+app.get('/register', function (req, res) {
+  res.render('register')
+})
+//
+//
 app.get('/error', function (req, res) {
   res.render('error')
 })
@@ -135,11 +144,6 @@ app.get('/posts/:postId', async (req, res) => {
   }
 })
 
-let port = process.env.PORT
-if (port == null || port == '') {
-  port = 3000
-}
-
 app.listen(port, function () {
-  console.log('Server started successfully at 3000')
+  console.log(`Server started successfully at ${port}`)
 })
