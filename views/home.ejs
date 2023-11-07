@@ -94,14 +94,17 @@
                       </svg><strong>Date:</strong></p>
                   </div>
                 </div>
-                <div class="row mt-3">
-                  <div class="col">
-                    <p class="card-text">
-                      <strong>Description: </strong>
-                      <%=post.content.substring(0, 200)+"...."%>
-                    </p>
+                <% posts.forEach(function(post) { %>
+                  <div class="card">
+                    <div class="card-body">
+                      <p class="card-text">
+                        <strong>Description: </strong>
+                        <%= post.content ? post.content.substring(0, 200) + "...." : "" %>
+                      </p>
+                    </div>
                   </div>
-                </div>
+                  <% }) %>
+
               </div>
               <div class="d-flex justify-content-end gap-2">
 

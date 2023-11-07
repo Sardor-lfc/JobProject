@@ -18,6 +18,38 @@ const postSchema = {
   status: String,
   type: String,
 }
+const loginSchema = {
+  name: String,
+  username: String,
+  password: String,
+}
+const registerSchema = {
+  name: String, // Full name
+  username: {
+    type: String,
+    required: true,
+    unique: true,
+    minLength: 5,
+    maxLength: 20,
+  },
+  password: {
+    type: String,
+    required: true,
+    minLength: 8,
+  },
+  gender: {
+    type: String,
+  },
+  profilePhoto: String, // URL or file path
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    validate: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+  },
+  // Other fields as needed
+}
+
 const dateSchema = new mongoose.Schema({
   dateString: {
     type: Date,
@@ -26,11 +58,13 @@ const dateSchema = new mongoose.Schema({
 })
 const DateModel = mongoose.model('Date', dateSchema)
 const Post = mongoose.model('Post', postSchema)
+const Login = mongoose.model('Login', loginSchema)
+const Register = mongoose.model('Register', registerSchema)
 //
 
-const userSchema = new mongoose.Schema({ email: String, password: String })
-
-const User = new mongoose.model('User', userSchema)
+//const userSchema = new mongoose.Schema({ email: String, password: String })
+//
+//const User = new mongoose.model('User', userSchema)
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static('public'))
@@ -94,6 +128,44 @@ app.post('/addjob', function (req, res) {
       console.log(err)
     })
 })
+// Login Authentication
+app.get('/login', function (req, res) {
+  const { username, password } = req.body
+
+  Register.findOne({ username: username, password: password }, (err, user) => {
+    if (err) {
+      console.log(err)
+      res.redirect('/error') // Handle errors as needed
+    } else if (user) {
+      // User found, create a session to represent the logged-in state
+      req.session.user = user
+      res.redirect('/dashboard') // Redirect to the dashboard or another page
+    } else {
+      res.redirect('/error') // User not found, handle as needed
+    }
+  })
+})
+//
+// Register Authentication
+app.post('/register', function (req, res) {
+  const post = Register({
+    name: req.body.name,
+    username: req.body.username,
+    password: req.body.password,
+    gender: req.body.gender,
+    profilePhoto: req.body.profilePicture,
+    email: req.body.email,
+  })
+  post
+    .save()
+    .then(() => {
+      res.redirect('/')
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+})
+//
 app.get('/static', function (req, res) {
   res.render('static')
 })
