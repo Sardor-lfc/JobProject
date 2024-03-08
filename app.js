@@ -79,43 +79,14 @@ const dateString = currentDate.toLocaleString('en-GB')
 const dateObject = new DateModel({ dateString })
 dateObject.save()
 // Filtering funcitons
-// Add this route to handle search/filtering
-app.get('/search', function (req, res) {
-  const typeQuery = req.query.type
-  const locationQuery = req.query.location
-
-  const filter = {}
-
-  if (typeQuery) {
-    filter.type = typeQuery
-  }
-
-  if (locationQuery) {
-    filter.location = { $regex: new RegExp(locationQuery, 'i') }
-  }
-
-  Post.find(filter)
-    .then((posts) => {
-      const dateOnlyString = new Date(dateString).toLocaleDateString()
-
-      res.render('home', {
-        posts: posts.map((post) => ({ ...post, dateAndTime: dateOnlyString })),
-      })
-    })
-    .catch((err) => {
-      console.error(err)
-      res.status(500).send('Server error')
-    })
-})
 
 //
 app.get('/', function (req, res) {
   Post.find({})
     .then((posts) => {
-      const dateOnlyString = new Date(dateString).toLocaleDateString()
-
       res.render('home', {
-        posts: posts.map((post) => ({ ...post, dateAndTime: dateOnlyString })),
+        posts: posts,
+        dateAndTime: dateString,
       })
     })
     .catch((err) => {
