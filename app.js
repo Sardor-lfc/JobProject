@@ -167,9 +167,7 @@ app.post('/register', function (req, res) {
     })
 })
 //
-app.get('/static', function (req, res) {
-  res.render('static')
-})
+
 app.get('/profile', function (req, res) {
   res.render('profile')
 })
