@@ -1,61 +1,60 @@
-<%- include("partials/header")-%>
-
-
-
-	<div class="container">
-		<div class="row justify-content-center">
-			<div class="col-md-6">
-				<div class="card border-0 shadow-sm">
-					<div class="card-body">
-
-						<h2 class="card-title text-center mb-5">Craete free a account</h2>
-						<form action="/register" method="post">
-							<div class="form-group">
-								<label for="name">Full Name</label>
-								<input class="form-control border-0 bg-light" type="text" name="name" id="name" />
-							</div>
-							<div class="form-group">
-								<label for="username">Username</label>
-								<input class="form-control border-0 bg-light" type="text" name="username"
-									id="username" />
-							</div>
-							<div class="form-group">
-								<label for="password">Password</label>
-								<input class="form-control border-0 bg-light" type="text" name="password"
-									id="password" />
-
-							</div>
-
-							<div class="input-group mt-3">
-								<select class="form-select" id="inputGroupSelect01" name="gender">
-									<option value="Male">Male</option>
-									<option value="Female">Female</option>
-
-								</select>
-							</div>
-							<div class="row">
-								<div class="col">
-									<div class="form-group">
-										<label for="profilePicture">Upload Profile Picture</label>
-										<input type="file" class="form-control" id="profilePicture"
-											name="profilePicture" accept="image/*">
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="Email">Email</label>
-								<input class="form-control border-0 bg-light" type="text" name="email" id="email" />
-							</div>
-
-							<button class="btn btn-primary btn-block mt-3" type="submit" name="button">
-								Publish
-							</button>
-						</form>
-					</div>
-				</div>
-
-			</div>
-		</div>
-	</div>
-
-	<%- include("partials/footer")-%>
+<div class="row mt-5">
+  <div class="col-md-6 m-auto">
+    <div class="card card-body">
+      <h1 class="text-center mb-3">
+        <i class="fas fa-user-plus"></i> Register
+      </h1>
+      <%= include ("./partials/messages"); %>
+      <form action="/users/register" method="POST">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input
+            type="name"
+            id="name"
+            name="name"
+            class="form-control"
+            placeholder="Enter Name"
+            value="<%= typeof name != 'undefined' ? name : '' %>"
+          />
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="form-control"
+            placeholder="Enter Email"
+            value="<%= typeof email != 'undefined' ? email : '' %>"
+          />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            class="form-control"
+            placeholder="Create Password"
+            value="<%= typeof password != 'undefined' ? password : '' %>"
+          />
+        </div>
+        <div class="form-group">
+          <label for="password2">Confirm Password</label>
+          <input
+            type="password"
+            id="password2"
+            name="password2"
+            class="form-control"
+            placeholder="Confirm Password"
+            value="<%= typeof password2 != 'undefined' ? password2 : '' %>"
+          />
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">
+          Register
+        </button>
+      </form>
+      <p class="lead mt-4">Have An Account? <a href="/users/login">Login</a></p>
+    </div>
+  </div>
+</div>

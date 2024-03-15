@@ -6,10 +6,39 @@ const mongoose = require('mongoose')
 const port = 4000
 const _ = require('lodash')
 const app = express()
+const expressLayouts = require('express-ejs-layouts')
+const passport = require('passport')
+const flash = require('connect-flash')
+const session = require('express-session')
 app.set('view engine', 'ejs')
+require('./config/passport')(passport)
+mongoose
+  .connect('mongodb://localhost:27017/jobDB', { useNewUrlParser: true })
+  .then(() => console.log('MongoDB connected'))
+  .catch((err) => console.log(err))
+app.use(expressLayouts)
+app.use(express.urlencoded({ extended: true }))
+app.use(
+  session({
+    secret: 'secret',
+    resave: true,
+    saveUninitialized: true,
+  }),
+)
+// Passport middleware
+app.use(passport.initialize())
+app.use(passport.session())
 
-mongoose.connect('mongodb://localhost:27017/jobDB', { useNewUrlParser: true })
-
+// Connect flash
+app.use(flash())
+app.use(function (req, res, next) {
+  res.locals.success_msg = req.flash('success_msg')
+  res.locals.error_msg = req.flash('error_msg')
+  res.locals.error = req.flash('error')
+  next()
+})
+app.use('/', require('./routes/index.js'))
+app.use('/users', require('./routes/users.js'))
 const postSchema = {
   title: String,
   company: String,
@@ -18,53 +47,12 @@ const postSchema = {
   status: String,
   type: String,
 }
-const loginSchema = {
-  name: String,
-  username: String,
-  password: String,
-}
-const registerSchema = {
-  name: String, // Full name
-  username: {
-    type: String,
-    required: true,
-    unique: true,
-    minLength: 5,
-    maxLength: 20,
-  },
-  password: {
-    type: String,
-    required: true,
-    minLength: 8,
-  },
-  gender: {
-    type: String,
-  },
-  profilePhoto: String, // URL or file path
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    validate: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-  },
-  // Other fields as needed
-}
 
-const dateSchema = new mongoose.Schema({
-  dateString: {
-    type: Date,
-    default: Date.now,
-  },
-})
-const DateModel = mongoose.model('Date', dateSchema)
 const Post = mongoose.model('Post', postSchema)
-const Login = mongoose.model('Login', loginSchema)
-const Register = mongoose.model('Register', registerSchema)
+
 //
 
 //const userSchema = new mongoose.Schema({ email: String, password: String })
-//
-//const User = new mongoose.model('User', userSchema)
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static('public'))
@@ -72,21 +60,13 @@ app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'))
 
 //
 
-const currentDate = new Date()
-currentDate.setHours(0, 0, 0, 0)
-const dateString = currentDate.toLocaleString('en-GB')
-
-const dateObject = new DateModel({ dateString })
-dateObject.save()
-// Filtering funcitons
-
 //
 app.get('/', function (req, res) {
   Post.find({})
     .then((posts) => {
       res.render('home', {
         posts: posts,
-        dateAndTime: dateString,
+        //dateAndTime: dateString,
       })
     })
     .catch((err) => {
@@ -99,12 +79,7 @@ app.get('/addjob', function (req, res) {
 })
 //
 //
-app.get('/login', function (req, res) {
-  res.render('login')
-})
-app.get('/register', function (req, res) {
-  res.render('register')
-})
+
 //
 //
 app.get('/error', function (req, res) {
@@ -130,47 +105,11 @@ app.post('/addjob', function (req, res) {
     })
 })
 // Login Authentication
-app.get('/login', function (req, res) {
-  const { username, password } = req.body
 
-  Register.findOne({ username: username, password: password }, (err, user) => {
-    if (err) {
-      console.log(err)
-      res.redirect('/error') // Handle errors as needed
-    } else if (user) {
-      // User found, create a session to represent the logged-in state
-      req.session.user = user
-      res.redirect('/dashboard') // Redirect to the dashboard or another page
-    } else {
-      res.redirect('/error') // User not found, handle as needed
-    }
-  })
-})
-//
-// Register Authentication
-app.post('/register', function (req, res) {
-  const post = Register({
-    name: req.body.name,
-    username: req.body.username,
-    password: req.body.password,
-    gender: req.body.gender,
-    profilePhoto: req.body.profilePicture,
-    email: req.body.email,
-  })
-  post
-    .save()
-    .then(() => {
-      res.redirect('/')
-    })
-    .catch((err) => {
-      console.log(err)
-    })
-})
 //
 
-app.get('/profile', function (req, res) {
-  res.render('profile')
-})
+//
+
 //
 app.post('/delete/:_id', async (req, res) => {
   try {
