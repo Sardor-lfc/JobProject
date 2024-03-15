@@ -67,9 +67,23 @@
                 Profile
               </a>
             </li>
+
           </ul>
+
         </div>
+
       </nav>
+    </div>
+    <div class="container mt-3">
+      <div class="row justify-content-end">
+        <div class="col-12 col-md-auto">
+          <p class="text-muted mt-3 h4">Welcome <%= user.name %>
+          </p>
+        </div>
+        <div class="col-12 col-md-auto">
+          <a href="/users/logout" class="btn btn-danger">Logout</a>
+        </div>
+      </div>
     </div>
   </div>
 

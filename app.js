@@ -80,7 +80,14 @@ app.get('/home', ensureAuthenticated, function (req, res) {
 })
 app.get('/', forwardAuthenticated, (req, res) => res.render('welcome'))
 app.get('/addjob', function (req, res) {
-  res.render('addjob')
+  res.render('addjob', {
+    user: req.user,
+  })
+})
+app.get('/profile', function (req, res) {
+  res.render('profile', {
+    user: req.user,
+  })
 })
 //
 //
