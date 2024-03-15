@@ -10,6 +10,11 @@ const expressLayouts = require('express-ejs-layouts')
 const passport = require('passport')
 const flash = require('connect-flash')
 const session = require('express-session')
+const {
+  ensureAuthenticated,
+  forwardAuthenticated,
+} = require('./config/auth.js')
+
 app.set('view engine', 'ejs')
 require('./config/passport')(passport)
 mongoose
@@ -37,7 +42,7 @@ app.use(function (req, res, next) {
   res.locals.error = req.flash('error')
   next()
 })
-app.use('/', require('./routes/index.js'))
+
 app.use('/users', require('./routes/users.js'))
 const postSchema = {
   title: String,
@@ -61,19 +66,19 @@ app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'))
 //
 
 //
-app.get('/', function (req, res) {
+app.get('/home', ensureAuthenticated, function (req, res) {
   Post.find({})
     .then((posts) => {
       res.render('home', {
         posts: posts,
-        //dateAndTime: dateString,
+        user: req.user,
       })
     })
     .catch((err) => {
       console.error(err)
     })
 })
-
+app.get('/', forwardAuthenticated, (req, res) => res.render('welcome'))
 app.get('/addjob', function (req, res) {
   res.render('addjob')
 })
