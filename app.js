@@ -1,9 +1,10 @@
-//require('dotenv').config()
+require('dotenv').config()
+
 const express = require('express')
 const bodyParser = require('body-parser')
 const ejs = require('ejs')
 const mongoose = require('mongoose')
-const port = 4000
+
 const _ = require('lodash')
 const app = express()
 const expressLayouts = require('express-ejs-layouts')
@@ -18,9 +19,12 @@ const {
 app.set('view engine', 'ejs')
 require('./config/passport')(passport)
 mongoose
-  .connect('mongodb://localhost:27017/jobDB', { useNewUrlParser: true })
+  .connect(process.env.MongoDB_Connect_Uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => console.log('MongoDB connected'))
-  .catch((err) => console.log(err))
+  .catch((err) => console.error('Error connecting to MongoDB:', err))
 app.use(expressLayouts)
 app.use(express.urlencoded({ extended: true }))
 app.use(
@@ -165,7 +169,7 @@ app.get('/posts/:postId', async (req, res) => {
     res.status(500).send('Server error')
   }
 })
-
-app.listen(port, function () {
-  console.log(`Server started successfully at ${port}`)
+const PORT = process.env.PORT
+app.listen(PORT, function () {
+  console.log(`Server started successfully at ${PORT}`)
 })
