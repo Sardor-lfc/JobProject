@@ -80,9 +80,11 @@
 									<input type="hidden" name="_method" value="DELETE" />
 									<button type="submit" class="btn btn-outline-danger">Delete</button>
 								</form>
-								<form method="GET" action="/edit/<%= post._id %>">
+								<form action="/edit/<%= post._id %>" method="POST">
+									<input type="hidden" name="_method" value="PUT">
 									<button type="submit" class="btn btn-success">Update Post</button>
 								</form>
+
 
 							</div>
 
