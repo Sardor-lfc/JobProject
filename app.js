@@ -18,8 +18,10 @@ const {
 
 app.set('view engine', 'ejs')
 require('./config/passport')(passport)
+MongoDB_Connect_Uri =
+  'mongodb+srv://sardordev99:1IVosjqmVzajTBRz@sardor.x1nvukx.mongodb.net/jobDB?retryWrites=true&w=majority&appName=sardor'
 mongoose
-  .connect(process.env.MongoDB_Connect_Uri, {
+  .connect(MongoDB_Connect_Uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -169,7 +171,7 @@ app.get('/posts/:postId', async (req, res) => {
     res.status(500).send('Server error')
   }
 })
-const PORT = process.env.PORT
+const PORT = 4000
 app.listen(PORT, function () {
   console.log(`Server started successfully at ${PORT}`)
 })
