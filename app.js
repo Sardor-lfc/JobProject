@@ -11,18 +11,15 @@ const expressLayouts = require('express-ejs-layouts')
 const passport = require('passport')
 const flash = require('connect-flash')
 const session = require('express-session')
-
 const {
   ensureAuthenticated,
   forwardAuthenticated,
 } = require('./config/auth.js')
-MongoDB_Connect_Uri =
-  'mongodb+srv://sardordev99:1IVosjqmVzajTBRz@sardor.x1nvukx.mongodb.net/jobDB?retryWrites=true&w=majority&appName=sardor'
 
 app.set('view engine', 'ejs')
 require('./config/passport')(passport)
 mongoose
-  .connect(MongoDB_Connect_Uri, {
+  .connect(process.env.MongoDB_Connect_Uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -140,32 +137,17 @@ app.post('/delete/:_id', async (req, res) => {
   }
 })
 //Update function
-app.get('/:id/edit', async (req, res) => {
-  try {
-    const post = await Post.findById(req.params.id)
 
-    res.render('posts/edit', { posts: post })
-  } catch {
-    res.render('/')
-  }
-})
-app.put('/edit/:_id', async (req, res) => {
-  let post
+app.get('/edit/:_id', async (req, res) => {
   try {
-    post = await Post.findById(req.params.id)
-
-    post._id = req.params._id
-    await post.save()
-    res.redirect('/')
-  } catch (error) {
-    if (post == null) {
-      res.redirect('/')
-    } else {
-      res.render('posts/edit', {
-        post: post,
-        error_msg: 'Error updating Post',
-      })
+    const post = await Post.findById(req.params._id)
+    if (!post) {
+      return res.status(404).send('Post not found')
     }
+    res.render('edits/edit', { post })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).send('Server error')
   }
 })
 
@@ -187,7 +169,7 @@ app.get('/posts/:postId', async (req, res) => {
     res.status(500).send('Server error')
   }
 })
-const PORT = 4000
+const PORT = process.env.PORT
 app.listen(PORT, function () {
   console.log(`Server started successfully at ${PORT}`)
 })
