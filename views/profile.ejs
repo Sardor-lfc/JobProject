@@ -1,2 +1,16 @@
-<%- include("partials/header")-%>
-	<form action="/profile" method="post"></form>
+<%- include("partials/header") %>
+
+	<div class="container">
+		<h1>User Profile</h1>
+		<p>Name: <%= user.name %>
+		</p>
+		<p>Email: <%= user.email %>
+		</p>
+
+		<% if (user.date) { %>
+			<p>Date: <%= user.date %>
+			</p>
+			<% } %>
+
+
+	</div>
